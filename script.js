@@ -20,4 +20,17 @@
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
   }
+
+  var loyaltyForm = document.getElementById('loyaltyForm');
+  var loyaltyNote = document.getElementById('loyaltyNote');
+
+  if (loyaltyForm && loyaltyNote) {
+    loyaltyForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      loyaltyForm.reset();
+      loyaltyForm.classList.add('is-submitted');
+      loyaltyNote.classList.add('is-success');
+      loyaltyNote.textContent = 'Thanks for joining — watch your email for a special welcome discount!';
+    });
+  }
 })();
