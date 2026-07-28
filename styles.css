@@ -458,6 +458,11 @@ section {
   content: "🎉 ";
 }
 
+.loyalty-note.is-error {
+  color: #fff2ea;
+  font-weight: 700;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
