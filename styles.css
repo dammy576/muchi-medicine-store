@@ -414,6 +414,7 @@ section {
   backdrop-filter: blur(3px);
 }
 
+.loyalty-form input[type="text"],
 .loyalty-form input[type="email"] {
   flex: 1 1 220px;
   padding: 14px 18px;
@@ -424,6 +425,7 @@ section {
   color: var(--brown);
 }
 
+.loyalty-form input[type="text"]:focus,
 .loyalty-form input[type="email"]:focus {
   outline: 3px solid var(--sunshine);
 }
@@ -437,11 +439,23 @@ section {
   margin: 0;
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
 }
 
-.loyalty-note.is-error {
-  color: #fff2ea;
+.loyalty-form.is-submitted input,
+.loyalty-form.is-submitted .btn {
+  display: none;
+}
+
+.loyalty-note.is-success {
+  font-size: 1.1rem;
   font-weight: 700;
+  color: var(--white);
+  text-align: center;
+}
+
+.loyalty-note.is-success::before {
+  content: "🎉 ";
 }
 
 .visually-hidden {
