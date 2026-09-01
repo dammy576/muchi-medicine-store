@@ -51,11 +51,12 @@
     });
   }
 
-  // Chat widget config. Point this at a real endpoint to go live.
+  // Chat widget config. Set apiEndpoint to the deployed Cloudflare Worker's
+  // URL (see worker/chat-worker.js) to go live, e.g.
+  // 'https://muchi-chat.YOUR-SUBDOMAIN.workers.dev'. Leave it null to keep
+  // the "Chat coming soon!" placeholder behavior.
   var CHAT_CONFIG = {
-    apiEndpoint: null // e.g. 'https://api.example.com/chat' — once set, replace the
-                       // placeholder branch in sendChatMessage() below with a real
-                       // fetch(CHAT_CONFIG.apiEndpoint, { method: 'POST', ... }) call.
+    apiEndpoint: null
   };
 
   var chatWidget = document.getElementById('chatWidget');
@@ -88,18 +89,57 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    function getChatHistory() {
+      return Array.prototype.slice.call(chatMessages.querySelectorAll('.chat-message'))
+        .map(function (el) {
+          return {
+            role: el.classList.contains('chat-message-user') ? 'user' : 'assistant',
+            content: el.textContent
+          };
+        });
+    }
+
     function sendChatMessage(text) {
-      if (CHAT_CONFIG.apiEndpoint) {
-        // TODO: once CHAT_CONFIG.apiEndpoint is set, call the real AI backend here, e.g.:
-        // fetch(CHAT_CONFIG.apiEndpoint, {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ message: text })
-        // }).then(function (res) { return res.json(); })
-        //   .then(function (data) { addChatMessage(data.reply, 'bot'); });
-      } else {
+      if (!CHAT_CONFIG.apiEndpoint) {
         addChatMessage('Chat coming soon!', 'bot');
+        return;
       }
+
+      // Captured before the typing bubble is appended below, so the last
+      // entry here is the message just added by the caller — drop it since
+      // the worker receives that one separately as `message`.
+      var history = getChatHistory().slice(0, -1);
+
+      var chatSend = chatForm.querySelector('.chat-send');
+      chatInput.disabled = true;
+      chatSend.disabled = true;
+
+      var typingEl = document.createElement('div');
+      typingEl.className = 'chat-message chat-message-bot';
+      typingEl.textContent = '...';
+      chatMessages.appendChild(typingEl);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      fetch(CHAT_CONFIG.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: history })
+      }).then(function (response) {
+        if (!response.ok) {
+          throw new Error('Chat request failed');
+        }
+        return response.json();
+      }).then(function (data) {
+        typingEl.remove();
+        addChatMessage(data.reply || 'Chat coming soon!', 'bot');
+      }).catch(function () {
+        typingEl.remove();
+        addChatMessage('Chat coming soon!', 'bot');
+      }).then(function () {
+        chatInput.disabled = false;
+        chatSend.disabled = false;
+        chatInput.focus();
+      });
     }
 
     chatBubble.addEventListener('click', function () {
