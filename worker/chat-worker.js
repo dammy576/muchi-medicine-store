@@ -16,7 +16,7 @@
  * real origin (e.g. "https://muchimedicinestore.com") to restrict which
  * sites may call this worker. Without it, any site can call the endpoint.
  *
- * (No functional change — this comment nudges the deploy pipeline to rebuild.)
+ * (No functional change — another no-op edit to prompt a fresh build attempt.)
  */
 
 const MODEL = 'claude-sonnet-5';
