@@ -51,12 +51,11 @@
     });
   }
 
-  // Chat widget config. Set apiEndpoint to the deployed Cloudflare Worker's
-  // URL (see worker/chat-worker.js) to go live, e.g.
-  // 'https://muchi-chat.YOUR-SUBDOMAIN.workers.dev'. Leave it null to keep
-  // the "Chat coming soon!" placeholder behavior.
+  // Chat widget config. apiEndpoint points at the deployed Cloudflare Worker
+  // (see worker/chat-worker.js). Leave it null to fall back to the
+  // "Chat coming soon!" placeholder behavior.
   var CHAT_CONFIG = {
-    apiEndpoint: null
+    apiEndpoint: 'https://muchi.muchimedia.workers.dev'
   };
 
   var chatWidget = document.getElementById('chatWidget');
