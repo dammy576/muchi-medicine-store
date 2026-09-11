@@ -1,0 +1,9 @@
+# Config for the Muchi Medicine Store chat proxy Worker (worker/chat-worker.js).
+# Lets Cloudflare's build system detect this as a Worker to deploy instead of
+# falling back to static-site detection (which fails since worker/ has no
+# html/css). Secrets like ANTHROPIC_API_KEY are set separately in the
+# Cloudflare dashboard and are not affected by this file.
+
+name = "muchi-medicine-store-chat"
+main = "worker/chat-worker.js"
+compatibility_date = "2024-01-01"
