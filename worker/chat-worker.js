@@ -1,11 +1,12 @@
 /**
  * Muchi Medicine Store chat proxy — Cloudflare Worker.
  *
- * Paste this into the Cloudflare dashboard's Worker editor (Workers & Pages →
- * your worker → Edit code) and deploy. It reads the Anthropic API key from
- * the ANTHROPIC_API_KEY secret you already set on the worker, so the key
- * never reaches the browser. The site's script.js calls this worker instead
- * of Anthropic directly.
+ * Deployed via Cloudflare's git-connected Workers Builds, driven by the
+ * wrangler.toml at the repo root (main = "worker/chat-worker.js"). Pushing
+ * to the connected branch triggers a rebuild. It reads the Anthropic API
+ * key from the ANTHROPIC_API_KEY secret set on the worker in the Cloudflare
+ * dashboard, so the key never reaches the browser. The site's script.js
+ * calls this worker instead of Anthropic directly.
  *
  * After deploying, the worker's URL is shown at the top of its dashboard
  * page (or under Settings → Domains & Routes if you haven't set one):
@@ -15,8 +16,6 @@
  * Optional: set an ALLOWED_ORIGIN environment variable/secret to your site's
  * real origin (e.g. "https://muchimedicinestore.com") to restrict which
  * sites may call this worker. Without it, any site can call the endpoint.
- *
- * (No functional change — another no-op edit to prompt a fresh build attempt.)
  */
 
 const MODEL = 'claude-sonnet-5';
